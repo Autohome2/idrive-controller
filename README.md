@@ -14,9 +14,9 @@ my unit had a 4 pin plug on the base with connections
 
 4 - can L
 
-This is what my unit looked like
+This is what my units looked like
 
 
 
 i used a arduino with a mcp2515 , along with the mcnight canbus library.
-a non library demo sketch is also here to make porting to other can controllers easier.
+a non library demo sketches are also here to make porting to other can controllers easier.
