@@ -27,7 +27,9 @@ byte data_560[] = {0x00, 0x00, 0x00, 0x00, 0x57, 0x2F, 0x00, 0x60};  // Generic 
 long unsigned int rxId;
 unsigned char len;
 unsigned char rxBuf[8];
+uint8_t last_message_count;
 uint8_t old_button_message = 0 ;
+uint8_t old_rotary_message = 0;
 uint8_t old_knob_message = 0;
 
 // Serial Output String Buffer
@@ -139,13 +141,21 @@ void std_message()
            {            
            
            case 0x80:                  //clockwise rotation
-                Serial.println ("CLOCKWISE ROTATION");
-                old_button_message = 0x80;
+                if (last_message_count != rxBuf[2])
+                  { 
+                   Serial.println ("CLOCKWISE ROTATION");
+                   last_message_count = rxBuf[2];
+                   old_rotary_message = 0x80;
+                  } 
            break;
            
            case 0x7F:                  //counter clockwise rotation
-                Serial.println ("COUNTER CLOCKWISE ROTATION");
-                old_button_message = 0x7F;
+                if (last_message_count != rxBuf[2])
+                  {
+                   Serial.println ("COUNTER CLOCKWISE ROTATION");
+                   last_message_count = rxBuf[2];
+                   old_rotary_message = 0x7F;
+                  } 
            break;
            }
     break;
@@ -304,49 +314,76 @@ void std_message()
                 
                 if (rxBuf[3] == 0x81)
                   {
-                   Serial.println ("KNOB PUSHED LEFT step1");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x81)
+                     { 
+                      Serial.println ("KNOB PUSHED LEFT step1");
+                      old_knob_message = 0x81;
+                     } 
                   }  
                 if (rxBuf[3] == 0x82)
                   {
-                   Serial.println ("KNOB PUSHED LEFT step2");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x82)
+                     { 
+                      Serial.println ("KNOB PUSHED LEFT step2");
+                      old_knob_message = 0x82;
+                     } 
                   }  
                 if (rxBuf[3] == 0x21)
                   {
-                   Serial.println ("KNOB PUSHED RIGHT step1");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x21)
+                     { 
+                      Serial.println ("KNOB PUSHED RIGHT step1");
+                      old_knob_message = 0x21;
+                     } 
                   } 
                 if (rxBuf[3] == 0x22)
                   {
-                   Serial.println ("KNOB PUSHED RIGHT step2");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x22)
+                     {
+                      Serial.println ("KNOB PUSHED RIGHT step2");
+                      old_knob_message = 0x22;
+                     } 
                   } 
                 if (rxBuf[3] == 0x41)
                   {
-                   Serial.println ("KNOB PUSHED DOWN step1");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x41)
+                     {
+                      Serial.println ("KNOB PUSHED DOWN step1");
+                      old_knob_message = 0x41;
+                     } 
                   } 
                 if (rxBuf[3] == 0x42)
                   {
-                   Serial.println ("KNOB PUSHED DOWN step2");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x42)
+                     {
+                      Serial.println ("KNOB PUSHED DOWN step2");
+                      old_knob_message = 0x42;
+                     } 
                   } 
                 if (rxBuf[3] == 0x11)
                   {
-                   Serial.println ("KNOB PUSHED UP step1");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x11)
+                     {
+                      Serial.println ("KNOB PUSHED UP step1");
+                      old_knob_message = 0x11;
+                     } 
                   } 
                 if (rxBuf[3] == 0x12)
                   {
-                   Serial.println ("KNOB PUSHED UP step2");
-                   old_knob_message = 0xDD;
+                   if(old_knob_message != 0x12)
+                     {
+                      Serial.println ("KNOB PUSHED UP step2");
+                      old_knob_message = 0x12;
+                     } 
                   }                
                      
                 else if (rxBuf[3] == 0x00)    //button released
-                 {  
-                  Serial.println ("KNOB PUSH RELEASED");
-                   old_knob_message = 0x00;
+                 {
+                  if(old_knob_message != 0x00)
+                     {  
+                      Serial.println ("KNOB PUSH RELEASED");
+                      old_knob_message = 0x00;
+                     } 
                  }
                
            break;
